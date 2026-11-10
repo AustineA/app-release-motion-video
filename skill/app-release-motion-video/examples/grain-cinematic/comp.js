@@ -553,8 +553,9 @@ const COMP = {
   duration: T.dur, fps: 30,
   theme: { bg: BG, text: PRINT, accent: PRINT, sans: SANS },
   images: { icon: 'img/icon.png', table: 'img/table.jpg', wall0: 'img/t60f_wall0.jpg' },
+  // the app's own typeface, taken from the app's bundled fonts (one file per weight)
+  fonts: [500, 700, 800].map(weight => [SANS, `fonts/Montserrat-${weight}.woff2`, { weight: String(weight) }]),
   async prepare() {
-    for (const weight of [500, 700, 800]) { const f = new FontFace(SANS, `url(fonts/Montserrat-${weight}.woff2)`, { weight: String(weight) }); await f.load(); document.fonts.add(f); }
     initScene();
   },
   scenes: [[0, film]],

@@ -5,7 +5,8 @@
 const W = (window.FORMAT && window.FORMAT.width) || 1080, H = (window.FORMAT && window.FORMAT.height) || 1920;
 const LANDSCAPE = W > H;
 // COMP.theme overrides. `font` drives mono()/rise()/typed(); `sans` is the family stack for ptext()/riseWords().
-const THEME = { bg: '#1A1A1C', text: '#F3EEE6', accent: '#FF8C00', font: 'VCR', sans: 'system-ui, -apple-system, "Helvetica Neue", sans-serif' };
+// Neutral placeholders in system fonts: every composition sets its product's colours and loads its fonts (COMP.fonts).
+const THEME = { bg: '#111111', text: '#FFFFFF', accent: '#FFFFFF', font: 'monospace', sans: 'system-ui, -apple-system, "Helvetica Neue", sans-serif' };
 
 // ---------- math
 const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
@@ -56,7 +57,8 @@ async function loadImg(key, src) {
 // ---------- text helpers
 let ADV = 0.6; // THEME.font advance per px of font size, measured at boot (assumes a monospace display font)
 function font(size, fam = THEME.font) {
-  ctx.font = fam === 'sans' ? `600 ${size}px ${THEME.sans}` : `${size}px "${fam}"`;
+  // a loaded family name is quoted; a generic keyword or a ready-made stack is used as written
+  ctx.font = fam === 'sans' ? `600 ${size}px ${THEME.sans}` : `${size}px ${/,|^(ui-)?monospace$/.test(fam) ? fam : `"${fam}"`}`;
 }
 // Monospace line with per-letter control: fn(i) -> {dy, alpha, ch, color, sx}
 function mono(s, x, y, size, { align = 'center', track = 0, color = THEME.text, per = null, glow = 0, glowColor = THEME.accent } = {}) {
@@ -383,7 +385,7 @@ window.META = () => ({ duration: COMP.duration, fps: COMP.fps || 30, width: W, h
 window.addEventListener('load', () => (async () => {
   out.width = W; out.height = H;
   Object.assign(THEME, COMP.theme || {});
-  for (const [family, url] of COMP.fonts || []) { const f = new FontFace(family, `url(${url})`); await f.load(); document.fonts.add(f); }
+  for (const [family, url, desc] of COMP.fonts || []) { const f = new FontFace(family, `url(${url})`, desc || {}); await f.load(); document.fonts.add(f); }
   await Promise.all(Object.entries(COMP.images || {}).map(([k, src]) => loadImg(k, src)));
   font(100); ADV = ctx.measureText('0').width / 100;
   makeNoise();

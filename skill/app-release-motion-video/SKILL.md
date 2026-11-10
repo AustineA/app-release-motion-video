@@ -55,14 +55,21 @@ Read the source of truth, not your memory. For a release reel: `git log -n 10 --
 requirements and URLs; every on-screen claim must trace back to one of them. Check project memory for
 product decisions (removed features, renamed things) before you script a scene about them.
 
-### 3. Extract the brand and never use the skill's colours
-The engine defaults (orange, VCR mono, VHS post) belong to the Last Summer example, not to your product.
+### 3. Extract the brand: colours, fonts and look all come from the project
+The skill ships no brand: no palette and no font files. The engine's theme defaults are white on near-black in the
+system fonts, there only so an unfilled template draws. The colours and faces in the examples belong to those
+products; never carry them into another one. The post defaults are still a VHS look, so set them (see Look).
 - **Colours**: CSS custom properties (`grep -o -- '--[a-z-]*:#[0-9a-f]*' landing/**/styles.css`), Tailwind config,
   app theme files (`colors.ts`, `Color+Brand.swift`, `colors.xml`). Take bg, surface, text, muted and one accent.
   Use them as tokens (`const BG = …, RED = …`) and derive tints with alpha, not new hues.
-- **Type**: the product's UI font. System-sans brands use `THEME.sans` with the proportional helpers
-  (`ptext`, `riseWords`, `fadeText`, `typedP`). Load a webfont through `COMP.fonts` and put it first in `THEME.sans`.
-  Monospace display fonts suit `mono`/`rise`/`typed`.
+- **Type**: the product's own fonts, found in the project, never chosen because an example used them. Look in the
+  app first (`UIAppFonts` in Info.plist, `*.ttf`/`*.otf` in the Xcode project or `assets/fonts`, `expo-font`,
+  `pubspec.yaml`), then the landing page (`@font-face`, Google Fonts links, Tailwind `fontFamily`). Copy or symlink
+  the files into the motion project's `fonts/` folder (ttf, otf and woff2 all load), list each weight in
+  `COMP.fonts`, and put the family first in `THEME.sans`. A product that uses the platform font gets the system
+  stack. Proportional faces go through `ptext`, `riseWords`, `fadeText` and `typedP`; a monospace display face goes
+  in `theme.font` for `mono`/`rise`/`typed`. If the product's font can't be found, say so and use the system stack
+  rather than substituting a lookalike.
 - **Look**: a clean brand (Apple-like, SaaS) gets `scanlines: 0, wobble: 0, grain ≈ 0.02, shift ≤ 0.6,
   vignette ≈ 0.3`, with no glitch or CRT. Use VHS/glitch only when it's the product's own aesthetic.
 - **Assets**: the logo file, real screenshots and real product output (`landing/public/assets`, `store/captures`,
@@ -132,7 +139,7 @@ Mac window, TV with bezel, remote, house, signal arcs, kinetic type wall).
 |---|---|
 | `duration`, `fps` | seconds, default 30 fps |
 | `theme` | `{ bg, text, accent, font, sans }`: `font` for the mono helpers, `sans` family stack for the proportional ones |
-| `fonts` | `[[family, url]]` loaded before start |
+| `fonts` | `[[family, url, descriptors?]]` loaded before start, from the project's own font files; one entry per weight (`{ weight: '700' }`) |
 | `images` | `{ key: url }` → `IMG[key]` (retries on flaky loads) |
 | `prepare()` | build offscreen textures once (grades, ASCII grids, prints…) |
 | `scenes` | `[[start, fn(u, t)]]`, where `u` is time within the scene and `t` is absolute |
@@ -211,7 +218,8 @@ Deliver the share encode, the master, `cover.jpg` and the project folder. Say pl
   from a guessed fraction of the font size: handwritten and display fonts (Noteworthy, script faces) have descenders
   that fall well below `0.3 × size`. A rise animation may start below the mask line, but once settled the whole
   word, tails and accents, sits inside it.
-- **Brand-true.** The product's colours, font, logo, real screens and real copy. Nothing from the skill's palette.
+- **Brand-true.** The product's colours, fonts, logo, real screens and real copy, all read from the project. Nothing
+  from an example's palette or type.
 
 ## Gotchas
 

@@ -1,4 +1,7 @@
 // Last Summer 1.2.0 — the reference composition. Loaded after engine/engine.js.
+// The product's own display face is not shipped with the skill, so this example draws in the system monospace.
+// A real project loads its brand font from its own files: fonts: [['Family', 'fonts/family.woff2']], theme.font: 'Family'.
+const MONO = 'monospace';
 const ORANGE = '#FF8C00', ORANGE_SOFT = '#FFB35C', RED = '#D8452B', BG = '#1A1A1C', CREAM = '#F3EEE6', MUTED = '#AAA49B', GOLD = '#FFD27A';
 const SUN = (() => { const c = document.createElement('canvas'); c.width = 900; c.height = 600; return c; })();
 const ROLLS = ['home-video', 'gold-snap', 'red-darkroom', 'rewind', 'instant-fade', 'night-vision', 'date-99', 'mju-soft',
@@ -97,9 +100,9 @@ function makePrints() {
     }
     g.restore();
     // serial + stamp on the border
-    g.fillStyle = 'rgba(40,36,32,0.75)'; g.font = '40px VCR'; g.textBaseline = 'middle';
+    g.fillStyle = 'rgba(40,36,32,0.75)'; g.font = `40px ${MONO}`; g.textBaseline = 'middle';
     g.fillText('Nº' + String(Math.floor(r() * 9000 + 1000)), 36, PRINT_H - 64);
-    g.fillStyle = ORANGE; g.textAlign = 'right'; g.font = '30px VCR';
+    g.fillStyle = ORANGE; g.textAlign = 'right'; g.font = `30px ${MONO}`;
     g.fillText('1/1', PRINT_W - 36, PRINT_H - 64);
     const specks = [];
     for (let i = 0, m = 3 + (r() * 4 | 0); i < m; i++) specks.push({ x: PHOTO.x + 40 + r() * (PHOTO.w - 80), y: PHOTO.y + 30 + r() * (PHOTO.h - 60), ph: r() * 6.28, s: 0.6 + r() * 0.8 });
@@ -617,8 +620,8 @@ function hud(t) {
 // ---------- composition
 const COMP = {
   duration: 15, fps: 30,
-  theme: { bg: BG, text: CREAM, accent: ORANGE, font: 'VCR' },
-  fonts: [['VCR', 'vcr.woff2']],
+  theme: { bg: BG, text: CREAM, accent: ORANGE, font: MONO },
+  fonts: [],
   images: {
     hero: 'img/hero.webp', camcorder: 'img/look-camcorder.webp', disposable: 'img/look-disposable.webp',
     ...Object.fromEntries(ROLLS.map(id => ['roll-' + id, `img/rolls/${id}.png`])),

@@ -104,7 +104,7 @@ function cta(u) {
 const COMP = {
   duration: DURATION, fps: 30,
   theme: { bg: BRAND.bg, text: BRAND.text, accent: BRAND.accent, font: 'sans', sans: BRAND.sans },
-  fonts: [], // [['Brand Display', 'fonts/brand.woff2']] and put the family first in BRAND.sans
+  fonts: [], // the product's own font files: [['Family', 'fonts/family-700.ttf', { weight: '700' }]], family first in BRAND.sans
   images: Object.assign(BRAND.logo ? { logo: BRAND.logo } : {}, Object.fromEntries(STORY.features.map((f, i) => [f, i]).filter(([f]) => f.image).map(([f, i]) => ['f' + i, f.image]))),
   scenes: [[0, hook], [CUTS[1], reveal], ...STORY.features.map((f, i) => [CUTS[2 + i], feature(f, i)]), [CUTS[CUTS.length - 1], cta]],
   whips: CUTS.slice(3, -1),       // smear between pushed feature scenes
