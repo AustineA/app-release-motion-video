@@ -23,9 +23,18 @@ It then symlinks them into detected Claude Code, Codex, Cursor, Windsurf, Antigr
 Other commands:
 
 ```bash
+npx github:AustineA/app-release-motion-video update
 npx github:AustineA/app-release-motion-video status
 npx github:AustineA/app-release-motion-video uninstall
 ```
+
+### Updating
+
+```bash
+npx github:AustineA/app-release-motion-video update
+```
+
+It compares the latest commit on GitHub with the one recorded at install time. If yours is older, it clones the latest version and installs it. The installed copy is replaced, not merged, so files removed from the skill don't linger. Restart your agent afterwards.
 
 ## Usage
 
